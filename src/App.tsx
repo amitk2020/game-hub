@@ -6,38 +6,41 @@ import { Genre } from "./hooks/useGenre";
 import { useState } from "react";
 import PlatformSelector from "./components/PlatformSelector";
 import { Platform } from "./hooks/usePlateforms";
-import { platform } from "os";
 
+export interface GameQuery {
+	genre: Genre | null,
+	platform: Platform | null,
+}
 function App() {
-  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
-  return (
-    <>
-      <Grid
-        templateAreas={{
-          base: `"nav" "main"`,
-          lg: `"nav nav" "aside main"`
-        }}
-        templateColumns={{
-          base: "1fr",
-          lg: "200px 1fr"
-        }}
-      >
-        <GridItem area="nav">
-          <NavBar />
-        </GridItem>
-        <Show above="lg">
-          <GridItem area="aside" paddingX={5}>
-            <GenreList selectedGenre={selectedGenre} onSelectedGenre={(genre) => { setSelectedGenre(genre) }}></GenreList>
-          </GridItem>
-        </Show>
-        <GridItem area="main">
-          <PlatformSelector selectedPlatform={selectedPlatform} onSelectedPlatform={(platform) => setSelectedPlatform(platform)} />
-          <GameGrid selectedPlatform={selectedPlatform} selectedGenre={selectedGenre} />
-        </GridItem>
-      </Grid>
-    </>
-  );
+
+	const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
+	return (
+		<>
+			<Grid
+				templateAreas={{
+					base: `"nav" "main"`,
+					lg: `"nav nav" "aside main"`
+				}}
+				templateColumns={{
+					base: "1fr",
+					lg: "200px 1fr"
+				}}
+			>
+				<GridItem area="nav">
+					<NavBar />
+				</GridItem>
+				<Show above="lg">
+					<GridItem area="aside" paddingX={5}>
+						<GenreList selectedGenre={gameQuery.genre} onSelectedGenre={(genre) => { setGameQuery({ ...gameQuery, genre }) }}></GenreList>
+					</GridItem>
+				</Show>
+				<GridItem area="main">
+					<PlatformSelector selectedPlatform={gameQuery.platform} onSelectedPlatform={(platform) => setGameQuery({ ...gameQuery, platform })} />
+					<GameGrid gameQuery={gameQuery} />
+				</GridItem>
+			</Grid>
+		</>
+	);
 }
 
 export default App;
