@@ -3,6 +3,7 @@ import { Game } from "../hooks/useGames";
 import PlatformIconsList from "./PlatformIconsList";
 import CriticScore from "./CriticScore";
 import getImageCroppedUrl from "../services/images-crop";
+import Emoji from "./Emoji";
 
 interface Props {
   game: Game;
@@ -17,7 +18,7 @@ const GameCard = ({ game }: Props) => {
           <PlatformIconsList platforms={game.parent_platforms.map(p => p.platform)} />
           <CriticScore score={game.metacritic}></CriticScore>
         </HStack>
-        <Heading fontSize="20px">{game.name}</Heading>
+        <Heading fontSize="20px">{game.name}<Emoji rating={game.rating_top} /></Heading>
       </CardBody>
     </Card>
   );
